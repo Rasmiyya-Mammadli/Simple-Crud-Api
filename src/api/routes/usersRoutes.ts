@@ -2,7 +2,8 @@ import { IncomingMessage, ServerResponse } from 'http';
 import { getAllUsers, getUserById, createUser, updateUser, deleteUser } from '../controllers/usersController';
 
 export function handleRequest(req: IncomingMessage, res: ServerResponse): void {
-  const { method, url } = req;
+  const method = req?.method;
+  const url = req?.url as string;
 
   if (url === '/api/users' && method === 'GET') {
     getAllUsers(req, res);

@@ -1,31 +1,33 @@
 import * as http from 'http';
-import * as cluster from 'cluster';
+import cluster from 'cluster';
 import * as sticky from 'sticky-session';
+import * as dotenv from 'dotenv';
+import * as process from 'node:process';
 
-const port: number = 4000;
 
-// Create the server instance
+dotenv.config();
+
 const server: http.Server = http.createServer((req: http.IncomingMessage, res: http.ServerResponse) => {
   // Handle your requests here
 });
 
-if ((cluster as any).isMaster) {
+if (cluster.isPrimary) {
   const numWorkers: number = require('os').cpus().length - 1;
 
   console.log(`Master process ${process.pid} is running`);
 
-  // Fork worker processes
   for (let i = 0; i < numWorkers; i++) {
-    (cluster as any).fork();
+    cluster.fork();
   }
 
-  (cluster as any).addListener('exit', (worker: cluster.Worker, code: number, signal: string) => {
-    console.log(`Worker process ${worker.process.pid} died`);
-    (cluster as any).fork(); // Fork a new worker process to replace the dead one
+  cluster.on('exit', (worker: Worker, code: number, signal: string) => {
+    console.log(`Worker process ${process.pid} died`);
+    cluster.fork(); // Fork a new worker process to replace the dead one
   });
 } else {
-  // Use sticky sessions to distribute requests across workers
-   sticky.listen(server, port);
-   console.log(`Worker process ${process.pid} is running on port ${port}`);
-    
+  const port: number = Number(process.env.PORT) || 4000;
+
+
+  sticky.listen(server, port);
+  console.log(`Worker process ${process.pid} is running on port ${port}`);
 }
