@@ -3,12 +3,13 @@ import cluster from 'cluster';
 import * as sticky from 'sticky-session';
 import * as dotenv from 'dotenv';
 import * as process from 'node:process';
+import { handleRequest } from './api/routes/usersRoutes';
 
 
 dotenv.config();
 
 const server: http.Server = http.createServer((req: http.IncomingMessage, res: http.ServerResponse) => {
-  // Handle your requests here
+  handleRequest(req, res);
 });
 
 if (cluster.isPrimary) {

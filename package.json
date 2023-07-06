@@ -9,10 +9,10 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "build": "webpack",
-    "start": "node dist/server.js",
+    "start": "node dist/server.cjs",
     "start:multi": "ts-node src/server.ts",
-    "start:dev": "ts-node src/server.ts",
-    "start:prod": "tsc && node dist/server.js"
+    "start:dev": "nodemon",
+    "start:prod": "npm run build && node ./dist/server.cjs"
   },
   "author": "Rasmiyya Mammadli",
   "license": "ISC",

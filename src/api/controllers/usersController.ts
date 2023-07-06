@@ -10,13 +10,13 @@ import {
 } from '../../db/inMemoryDb';
 
 export async function getAllUsers(req: IncomingMessage, res: ServerResponse): Promise<void> {
-  const users = await getAllUsersFromDb();
+  const users = getAllUsersFromDb();
   res.writeHead(200, { 'Content-Type': 'application/json' });
   res.end(JSON.stringify(users));
 }
 
 export async function getUserById(req: IncomingMessage, res: ServerResponse, userId: string): Promise<void> {
-  const user = await getUserByIdFromDb(userId);
+  const user = getUserByIdFromDb(userId);
 
   if (user) {
     res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -50,7 +50,7 @@ export async function createUser(req: IncomingMessage, res: ServerResponse): Pro
       hobbies: hobbies || [],
     };
 
-    const createdUser = await createUserInDb(newUser);
+    const createdUser = createUserInDb(newUser);
     res.writeHead(201, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(createdUser));
   });
@@ -79,7 +79,7 @@ export async function updateUser(req: IncomingMessage, res: ServerResponse, user
       hobbies: hobbies || [],
     };
 
-    const user = await updateUserInDb(updatedUser);
+    const user = updateUserInDb(updatedUser);
 
     if (user) {
       res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -92,7 +92,7 @@ export async function updateUser(req: IncomingMessage, res: ServerResponse, user
 }
 
 export async function deleteUser(req: IncomingMessage, res: ServerResponse, userId: string): Promise<void> {
-  const deleted = await deleteUserInDb(userId);
+  const deleted = deleteUserInDb(userId);
 
   if (deleted) {
     res.writeHead(204);
