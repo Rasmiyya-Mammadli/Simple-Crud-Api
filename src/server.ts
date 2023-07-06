@@ -1,8 +1,8 @@
-import * as http from 'http';
+import  http from 'http';
 import cluster from 'cluster';
-import * as sticky from 'sticky-session';
-import * as dotenv from 'dotenv';
-import * as process from 'node:process';
+import sticky from 'sticky-session';
+import dotenv from 'dotenv';
+import process from 'node:process';
 import { handleRequest } from './api/routes/usersRoutes';
 
 
@@ -14,7 +14,7 @@ const server: http.Server = http.createServer((req: http.IncomingMessage, res: h
 
 if (cluster.isPrimary) {
   const numWorkers: number = require('os').cpus().length - 1;
-
+  
   console.log(`Master process ${process.pid} is running`);
 
   for (let i = 0; i < numWorkers; i++) {
@@ -29,6 +29,6 @@ if (cluster.isPrimary) {
   const port: number = Number(process.env.PORT) || 4000;
 
 
-  sticky.listen(server, port);
+  server.listen( port);
   console.log(`Worker process ${process.pid} is running on port ${port}`);
 }
